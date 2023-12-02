@@ -67,10 +67,6 @@ export type Message = {
 
 export type Settings = {
   apiUrl: string
-  splitFileSize: number
-  uploadConcurrency: number
-  channel?: Channel
-  bots?: string
 }
 
 export type Session = {

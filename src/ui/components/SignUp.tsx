@@ -1,12 +1,12 @@
-import { useCallback, useEffect, useRef, useState } from "react"
-import { AuthMessage, Message } from "@/ui/types"
-import { Box, Checkbox, FormControlLabel, TextField } from "@mui/material"
+import { useCallback, useState } from "react"
+import { Message } from "@/ui/types"
+import { Box, TextField } from "@mui/material"
 import Button from "@mui/material/Button"
 import Container from "@mui/material/Container"
 import Paper from "@mui/material/Paper"
 import Typography from "@mui/material/Typography"
 import { useQueryClient } from "@tanstack/react-query"
-import axios, { AxiosError } from "axios"
+import axios from "axios"
 import { Controller, useForm } from "react-hook-form"
 import { toast } from "react-hot-toast"
 import { useLocation, useNavigate } from "react-router-dom"
@@ -16,14 +16,16 @@ import http from "@/ui/utils/http"
 type FormState = {
   userName: string
   password: string
+  email: string
 }
-export default function SignIn() {
+export default function SignUp() {
   const [isLoading, setLoading] = useState(false)
 
   const { control, handleSubmit } = useForm<FormState>({
     defaultValues: {
       userName: "",
       password: "",
+      email: "",
     },
   })
 
@@ -38,7 +40,7 @@ export default function SignIn() {
   const onSubmit = useCallback(async (payload: FormState) => {
     setLoading(true)
     try {
-      await http.post<Message>("/api/auth/login", payload)
+      await http.post<Message>("/api/auth/signup", payload)
       await queryClient.invalidateQueries({ queryKey: ["session"] })
       navigate(from ? from : "/my-drive", { replace: true })
     } catch (err) {
@@ -65,7 +67,7 @@ export default function SignIn() {
         }}
       >
         <Typography component="h1" variant="h5">
-          Login
+          Signup
         </Typography>
         <Box
           component="form"
@@ -97,6 +99,29 @@ export default function SignIn() {
             )}
           />
           <Controller
+            name="email"
+            control={control}
+            rules={{
+              required: true,
+              pattern: {
+                value: /\S+@\S+\.\S+/,
+                message: "invalid email format",
+              },
+            }}
+            render={({ field, fieldState: { error } }) => (
+              <TextField
+                {...field}
+                margin="normal"
+                required
+                fullWidth
+                error={!!error}
+                type="email"
+                label="Email"
+                helperText={error ? error.message : ""}
+              />
+            )}
+          />
+          <Controller
             name="password"
             control={control}
             rules={{ required: true }}
@@ -120,16 +145,7 @@ export default function SignIn() {
             disabled={isLoading}
             sx={{ mt: 3, mb: 2 }}
           >
-            {isLoading ? "Please Wait…" : "Login"}
-          </Button>
-
-          <Button
-            onClick={() => navigate("/signup")}
-            fullWidth
-            variant="tonal"
-            sx={{ mt: 3, mb: 2 }}
-          >
-            SignUp
+            {isLoading ? "Please Wait…" : "Enter"}
           </Button>
         </Box>
       </Paper>

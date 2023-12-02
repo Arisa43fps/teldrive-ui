@@ -128,7 +128,7 @@ export default function Header({ session }: { session?: Session | null }) {
                 textDecoration: "none",
               }}
             >
-              TelDrive
+              VKDrive
             </Typography>
           </Grid>
           <Grid item xs sx={{ display: "flex", alignItems: "baseline" }}>

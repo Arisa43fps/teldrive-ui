@@ -84,7 +84,7 @@ export const getMediaUrl = (
   download = false
 ) => {
   const host = apiHost ? apiHost : window.location.origin
-  return `${host}/api/files/${id}/${encodeURIComponent(name)}?hash=${hash}${
+  return `${host}/api/files/${id}/${encodeURIComponent(name)}${
     download ? "&d=1" : ""
   }`
 }
@@ -99,12 +99,6 @@ export default function textToSvgURL(text: string) {
     reader.readAsDataURL(blob)
   })
 }
-
-export const splitFileSizes = [
-  { value: 500 * 1024 * 1024, label: "500MB" },
-  { value: 1000 * 1024 * 1024, label: "1GB" },
-  { value: 2 * 1000 * 1024 * 1024, label: "2GB" },
-]
 
 export const getParams = (params: Params<string>): QueryParams => {
   const { type } = params

@@ -46,7 +46,6 @@ const VideoPlayer: FC<{
     moreVideoAttr: {
       // @ts-ignore
       "webkit-playsinline": true,
-      crossOrigin: "use-credentials",
       playsInline: true,
     },
   }

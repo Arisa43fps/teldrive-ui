@@ -106,28 +106,9 @@ export const CustomActions = {
           ? CustomVisibilityState.Hidden
           : CustomVisibilityState.Default,
     }),
-  UploadFiles: (group = "", path = "") =>
-    defineFileAction({
-      id: "upload_files",
-      button: {
-        name: "Upload files",
-        tooltip: "Upload files",
-        toolbar: true,
-        ...(group && { group }),
-        icon: ChonkyIconName.upload,
-      },
-      customVisibility: () =>
-        path !== "my-drive"
-          ? CustomVisibilityState.Hidden
-          : CustomVisibilityState.Default,
-    }),
 }
 
-export const useFileAction = (
-  setModalState: SetValue<Partial<ModalState>>,
-  openUpload: () => void,
-  openFileDialog: () => void
-) => {
+export const useFileAction = (setModalState: SetValue<Partial<ModalState>>) => {
   const params = getParams(useParams())
 
   const { type, path } = params
@@ -153,7 +134,6 @@ export const useFileAction = (
       CustomActions.OpenInVLCPlayer,
       CustomActions.SyncFiles,
       CustomActions.CreateFolder(isSm ? "Actions" : "", type),
-      CustomActions.UploadFiles(isSm ? "Actions" : "", type),
     ],
     [isSm, type]
   )
@@ -234,11 +214,6 @@ export const useFileAction = (
             open: true,
             operation: ChonkyActions.CreateFolder.id,
           })
-          break
-        }
-        case ChonkyActions.UploadFiles.id: {
-          openUpload()
-          openFileDialog()
           break
         }
         case CustomActions.CopyDownloadLink.id: {

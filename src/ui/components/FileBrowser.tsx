@@ -15,7 +15,6 @@ import {
   VirtuosoGridHandle,
   VirtuosoHandle,
 } from "react-virtuoso"
-import { useBoolean } from "usehooks-ts"
 
 import { useFetchFiles } from "@/ui/hooks/queryhooks"
 import { useDevice } from "@/ui/hooks/useDevice"
@@ -28,7 +27,6 @@ import DeleteDialog from "./DeleteDialog"
 import ErrorView from "./ErrorView"
 import FileModal from "./FileModal"
 import PreviewModal from "./PreviewModal"
-import Upload from "./UploadBar"
 
 const PREFIX = "MyFileBrowser"
 
@@ -72,18 +70,6 @@ const MyFileBrowser = () => {
   const params = getParams(useParams())
 
   const { type, path } = params
-
-  const {
-    value: upload,
-    setTrue: showUpload,
-    setFalse: hideUpload,
-  } = useBoolean(false)
-
-  const {
-    value: fileDialogOpened,
-    setTrue: openFileDialog,
-    setFalse: closeFileDialog,
-  } = useBoolean(false)
 
   const { isMobile } = useDevice()
 
@@ -131,11 +117,7 @@ const MyFileBrowser = () => {
     operation: CustomActions.RenameFile.id,
   })
 
-  const { fileActions, chonkyActionHandler } = useFileAction(
-    setModalState,
-    showUpload,
-    openFileDialog
-  )
+  const { fileActions, chonkyActionHandler } = useFileAction(setModalState)
 
   const { open } = modalState
 
@@ -199,13 +181,6 @@ const MyFileBrowser = () => {
       )}
       {modalState.operation === CustomActions.DeleteFile.id && open && (
         <DeleteDialog modalState={modalState} setModalState={setModalState} />
-      )}
-      {upload && (
-        <Upload
-          fileDialogOpened={fileDialogOpened}
-          closeFileDialog={closeFileDialog}
-          hideUpload={hideUpload}
-        />
       )}
     </Root>
   )
