@@ -40,6 +40,10 @@ const router = createBrowserRouter([
         lazy: () => import("@/ui/routes/login"),
       },
       {
+        path: "signup",
+        lazy: () => import("@/ui/routes/signup"),
+      },
+      {
         path: ":type/*",
         async lazy() {
           const { FileBrowser } = await import("@/ui/routes/path")
