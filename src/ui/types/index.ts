@@ -71,6 +71,7 @@ export type QueryParams = {
 export type AccountStats = {
   totalSize: number
   totalFiles: number
+  [key: string]: number | string
 }
 
 export type Tags = {
