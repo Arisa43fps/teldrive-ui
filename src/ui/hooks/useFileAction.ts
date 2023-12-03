@@ -168,13 +168,7 @@ export const useFileAction = (setModalState: SetValue<Partial<ModalState>>) => {
           for (const file of selectedFiles) {
             if (!FileHelper.isDirectory(file)) {
               const { id, name } = file
-              const url = getMediaUrl(
-                settings.apiUrl,
-                id,
-                name,
-                session?.hash!,
-                true
-              )
+              const url = getMediaUrl(settings.apiUrl, id, name, true)
               navigateToExternalUrl(url, false)
             }
           }
@@ -184,12 +178,7 @@ export const useFileAction = (setModalState: SetValue<Partial<ModalState>>) => {
           const { selectedFiles } = data.state
           const fileToOpen = selectedFiles[0]
           const { id, name } = fileToOpen
-          const url = `vlc://${getMediaUrl(
-            settings.apiUrl,
-            id,
-            name,
-            session?.hash!
-          )}`
+          const url = `vlc://${getMediaUrl(settings.apiUrl, id, name)}`
           navigateToExternalUrl(url, false)
           break
         }
@@ -225,8 +214,7 @@ export const useFileAction = (setModalState: SetValue<Partial<ModalState>>) => {
               clipboardText = `${clipboardText}${getMediaUrl(
                 settings.apiUrl,
                 id,
-                name,
-                session?.hash!
+                name
               )}\n`
             }
           })
@@ -235,13 +223,12 @@ export const useFileAction = (setModalState: SetValue<Partial<ModalState>>) => {
         }
         case ChonkyActions.MoveFiles.id: {
           const { files, destination } = data.payload
-          let res = (
-            await http.post<Message>("/api/files/movefiles", {
-              files: files.map((file) => file.id),
-              destination: destination.path ? destination.path : "/",
-            })
-          ).data
-          if (res.status) {
+          let res = await http.post<Message>("/api/files/move", {
+            files: files.map((file) => file.id),
+            destination: destination.path ? destination.path : "/",
+          })
+
+          if (res.status === 200) {
             queryClient.invalidateQueries({
               queryKey: ["files", { active: true }],
             })
